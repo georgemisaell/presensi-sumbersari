@@ -72,11 +72,25 @@ export default function Home() {
         });
         setLocLoading(false);
       },
-      () => {
-        setLocError("Tidak dapat mengambil lokasi. Pastikan izin lokasi (Location) diizinkan di browser Anda dan di pengaturan Windows.");
+      (error) => {
+        let errMsg = "Tidak dapat mengambil lokasi.";
+        if (error.code === 1) {
+          errMsg = "Izin lokasi DITOLAK oleh browser. Klik ikon gembok di sebelah URL (address bar) dan pastikan Location diset ke 'Allow'.";
+        } else if (error.code === 2) {
+          errMsg = "Sinyal lokasi tidak tersedia. Coba gunakan koneksi internet/Wi-Fi lain.";
+        } else if (error.code === 3) {
+          errMsg = "Pencarian lokasi memakan waktu terlalu lama (Timeout).";
+        }
+        
+        // Peringatan khusus jika diakses dari IP (misal http://192...) alih-alih localhost
+        if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
+          errMsg += " INFO: Lokasi otomatis DIBLOKIR jika Anda mengakses via IP tanpa HTTPS. Gunakan http://localhost:3000.";
+        }
+
+        setLocError(errMsg);
         setLocLoading(false);
       },
-      { timeout: 10000, enableHighAccuracy: true }
+      { timeout: 15000, maximumAge: 10000 }
     );
   }
 
