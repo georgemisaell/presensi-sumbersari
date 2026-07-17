@@ -54,10 +54,14 @@ export default function Home() {
     router.push("/login");
   }
 
+  const [locLoading, setLocLoading] = useState(false);
+
   function getLocation() {
     setLocError("");
+    setLocLoading(true);
     if (!navigator.geolocation) {
       setLocError("Geolocation is not supported by your browser");
+      setLocLoading(false);
       return;
     }
     navigator.geolocation.getCurrentPosition(
@@ -66,10 +70,13 @@ export default function Home() {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         });
+        setLocLoading(false);
       },
       () => {
-        setLocError("Unable to retrieve your location. Please grant permission.");
-      }
+        setLocError("Tidak dapat mengambil lokasi. Pastikan izin lokasi (Location) diizinkan di browser Anda dan di pengaturan Windows.");
+        setLocLoading(false);
+      },
+      { timeout: 10000, enableHighAccuracy: true }
     );
   }
 
@@ -170,8 +177,8 @@ export default function Home() {
           ) : (
             <div>
               <p style={{ color: "var(--text-secondary)", marginBottom: "1rem" }}>Kami perlu mendeteksi lokasi Anda untuk presensi.</p>
-              <button onClick={getLocation} className="btn btn-primary" style={{ width: "100%" }}>
-                <MapPin size={18} /> Dapatkan Lokasi
+              <button onClick={getLocation} className="btn btn-primary" style={{ width: "100%" }} disabled={locLoading}>
+                {locLoading ? <div className="spinner"></div> : <><MapPin size={18} /> Dapatkan Lokasi</>}
               </button>
               {locError && <p style={{ color: "var(--danger)", marginTop: "0.5rem", fontSize: "0.875rem" }}>{locError}</p>}
             </div>
