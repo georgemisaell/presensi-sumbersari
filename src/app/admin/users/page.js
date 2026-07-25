@@ -111,7 +111,7 @@ export default function AdminUsers() {
 
   return (
     <div className="animate-fade-in">
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+      <div className="flex-responsive" style={{ marginBottom: "2rem" }}>
         <h1>Data Users</h1>
         <div className="badge badge-success">Total: {users.filter(u => u.status !== 'deleted').length} Active Users</div>
       </div>

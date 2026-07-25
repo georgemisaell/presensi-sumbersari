@@ -185,7 +185,7 @@ export default function Home() {
 
   return (
     <div className="container" style={{ padding: "2rem 1.5rem" }}>
-      <header style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "2rem" }}>
+      <header className="flex-responsive" style={{ marginBottom: "2rem" }}>
         <div>
           <h2>Halo, {user.name}!</h2>
           <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>

@@ -51,7 +51,7 @@ export default function AdminDashboard() {
         </div>
       </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "1.5rem" }}>
+      <div className="dashboard-grid">
         <div className="glass-card">
           <h3 style={{ marginBottom: "1.5rem", fontSize: "1.125rem" }}>Kehadiran 7 Hari Terakhir</h3>
           <div style={{ height: "300px" }}>
