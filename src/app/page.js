@@ -126,10 +126,22 @@ export default function Home() {
     setMessage(""); // Clear message when taking a new photo
     if (videoRef.current && canvasRef.current) {
       const context = canvasRef.current.getContext("2d");
-      canvasRef.current.width = videoRef.current.videoWidth;
-      canvasRef.current.height = videoRef.current.videoHeight;
-      context.drawImage(videoRef.current, 0, 0);
-      const dataUrl = canvasRef.current.toDataURL("image/jpeg", 0.8);
+      // Compress photo: scale down to max width 400px
+      const maxWidth = 400;
+      let width = videoRef.current.videoWidth;
+      let height = videoRef.current.videoHeight;
+      
+      if (width > maxWidth) {
+        height = Math.floor(height * (maxWidth / width));
+        width = maxWidth;
+      }
+      
+      canvasRef.current.width = width;
+      canvasRef.current.height = height;
+      context.drawImage(videoRef.current, 0, 0, width, height);
+      
+      // Compress with 0.6 quality
+      const dataUrl = canvasRef.current.toDataURL("image/jpeg", 0.6);
       setPhotoBase64(dataUrl);
 
       const stream = videoRef.current.srcObject;

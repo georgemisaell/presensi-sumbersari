@@ -51,6 +51,10 @@ export default function AdminAttendance() {
     const newStatus = prompt("Masukkan status baru (Hadir/Terlambat/Izin/Sakit):", currentStatus);
     if (!newStatus || newStatus === currentStatus) return;
 
+    // Optimistic Update
+    const originalRecords = [...records];
+    setRecords(records.map(r => r.id === id ? { ...r, status: newStatus } : r));
+
     try {
       const res = await fetch("/api/admin/attendance", {
         method: "PUT",
@@ -58,12 +62,12 @@ export default function AdminAttendance() {
         body: JSON.stringify({ id, status: newStatus }),
       });
       const data = await res.json();
-      if (data.success) {
-        fetchAttendance(); // refresh
-      } else {
+      if (!data.success) {
+        setRecords(originalRecords); // Revert
         alert("Gagal update: " + data.message);
       }
     } catch (err) {
+      setRecords(originalRecords); // Revert
       alert("Error saat update");
     }
   }
@@ -71,6 +75,10 @@ export default function AdminAttendance() {
   async function deleteRecord(id) {
     if (!confirm("Yakin ingin menghapus data presensi ini?")) return;
     
+    // Optimistic UI Update
+    const originalRecords = [...records];
+    setRecords(records.filter(r => r.id !== id));
+
     try {
       const res = await fetch("/api/admin/attendance", {
         method: "DELETE",
@@ -78,12 +86,12 @@ export default function AdminAttendance() {
         body: JSON.stringify({ id }),
       });
       const data = await res.json();
-      if (data.success) {
-        fetchAttendance(); // refresh
-      } else {
+      if (!data.success) {
+        setRecords(originalRecords); // Revert
         alert("Gagal hapus: " + data.message);
       }
     } catch (err) {
+      setRecords(originalRecords); // Revert
       alert("Error saat hapus");
     }
   }

@@ -20,6 +20,10 @@ export default function AdminUsers() {
   async function handleUpdateStatus(userId, status) {
     if (!confirm(`Are you sure you want to ${status} this user?`)) return;
 
+    // Optimistic UI Update
+    const originalUsers = [...users];
+    setUsers(users.map(u => u.id === userId ? { ...u, status: status } : u));
+
     try {
       const res = await fetch("/api/admin/users/status", {
         method: "POST",
@@ -27,19 +31,22 @@ export default function AdminUsers() {
         body: JSON.stringify({ userId, status }),
       });
       const result = await res.json();
-      if (result.success) {
-        setUsers(users.map(u => u.id === userId ? { ...u, status: status } : u));
-        alert(`User ${status} successfully!`);
-      } else {
+      if (!result.success) {
+        setUsers(originalUsers); // Revert on failure
         alert("Failed: " + result.message);
       }
     } catch (e) {
+      setUsers(originalUsers); // Revert on error
       alert("Error updating user status");
     }
   }
 
   async function handleDelete(userId) {
     if (!confirm(`Are you sure you want to delete this user? (Soft delete)`)) return;
+
+    // Optimistic UI Update
+    const originalUsers = [...users];
+    setUsers(users.map(u => u.id === userId ? { ...u, status: "deleted" } : u));
 
     try {
       const res = await fetch("/api/admin/users/delete", {
@@ -48,13 +55,12 @@ export default function AdminUsers() {
         body: JSON.stringify({ userId }),
       });
       const result = await res.json();
-      if (result.success) {
-        setUsers(users.map(u => u.id === userId ? { ...u, status: "deleted" } : u));
-        alert(`User deleted successfully!`);
-      } else {
+      if (!result.success) {
+        setUsers(originalUsers); // Revert on failure
         alert("Failed: " + result.message);
       }
     } catch (e) {
+      setUsers(originalUsers); // Revert on error
       alert("Error deleting user");
     }
   }
