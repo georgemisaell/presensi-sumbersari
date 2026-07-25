@@ -13,7 +13,7 @@ export default function Home() {
   const [photoBase64, setPhotoBase64] = useState(null);
   const [submitting, setSubmitting] = useState(false);
   const [message, setMessage] = useState("");
-  
+
   // Check-in / Check-out states
   const [todayStatus, setTodayStatus] = useState(null); // 'none', 'checked-in', 'checked-out'
   const [fetchingStatus, setFetchingStatus] = useState(true);
@@ -97,7 +97,7 @@ export default function Home() {
         } else if (error.code === 3) {
           errMsg = "Pencarian lokasi memakan waktu terlalu lama (Timeout).";
         }
-        
+
         if (window.location.hostname !== 'localhost' && window.location.protocol !== 'https:') {
           errMsg += " INFO: Lokasi otomatis DIBLOKIR jika Anda mengakses via IP tanpa HTTPS. Gunakan http://localhost:3000.";
         }
@@ -131,7 +131,7 @@ export default function Home() {
       context.drawImage(videoRef.current, 0, 0);
       const dataUrl = canvasRef.current.toDataURL("image/jpeg", 0.8);
       setPhotoBase64(dataUrl);
-      
+
       const stream = videoRef.current.srcObject;
       if (stream) {
         stream.getTracks().forEach(track => track.stop());
@@ -147,7 +147,7 @@ export default function Home() {
 
   async function submitAttendance(type) {
     if (!location || !photoBase64) return;
-    
+
     setSubmitting(true);
     setMessage("");
 
@@ -201,7 +201,7 @@ export default function Home() {
       </header>
 
       <main className="glass-card animate-fade-in" style={{ maxWidth: "600px", margin: "0 auto" }}>
-        
+
         {todayStatus === 'checked-out' ? (
           <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
             <div className="flex-center" style={{ width: "80px", height: "80px", borderRadius: "50%", background: "rgba(16, 185, 129, 0.1)", margin: "0 auto 1.5rem" }}>
@@ -217,7 +217,7 @@ export default function Home() {
               <h3 style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
                 <MapPin size={20} color="var(--accent-color)" /> Lokasi Saat Ini
               </h3>
-              
+
               {location ? (
                 <div style={{ background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.2)", padding: "1rem", borderRadius: "var(--radius-md)", color: "var(--success)" }}>
                   Lokasi berhasil didapatkan: {location.lat.toFixed(5)}, {location.lng.toFixed(5)}
@@ -249,10 +249,10 @@ export default function Home() {
                         </button>
                       </div>
                     )}
-                    <video 
-                      ref={videoRef} 
-                      autoPlay 
-                      playsInline 
+                    <video
+                      ref={videoRef}
+                      autoPlay
+                      playsInline
                       style={{ width: "100%", display: streamActive ? "block" : "none" }}
                     ></video>
                     {streamActive && (
@@ -271,7 +271,7 @@ export default function Home() {
                     </button>
                   </div>
                 )}
-                
+
                 {/* Hidden canvas for capturing the frame */}
                 <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
               </div>
@@ -285,11 +285,11 @@ export default function Home() {
                     {message}
                   </div>
                 )}
-                
-                <button 
-                  onClick={() => submitAttendance(todayStatus === 'checked-in' ? 'Check Out' : 'Check In')} 
-                  className={`btn ${todayStatus === 'checked-in' ? 'btn-warning' : 'btn-primary'}`} 
-                  style={{ width: "100%", padding: "1rem", fontSize: "1.125rem" }} 
+
+                <button
+                  onClick={() => submitAttendance(todayStatus === 'checked-in' ? 'Check Out' : 'Check In')}
+                  className={`btn ${todayStatus === 'checked-in' ? 'btn-warning' : 'btn-primary'}`}
+                  style={{ width: "100%", padding: "1rem", fontSize: "1.125rem" }}
                   disabled={submitting}
                 >
                   {submitting ? <div className="spinner"></div> : <><Send size={20} /> {todayStatus === 'checked-in' ? 'Kirim Check Out' : 'Kirim Check In'}</>}

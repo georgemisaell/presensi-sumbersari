@@ -24,11 +24,11 @@ export async function POST(request) {
     });
 
     const data = await response.json();
-    
+
     if (data.success && data.user) {
       await setSession(data.user);
     }
-    
+
     return NextResponse.json(data);
   } catch (error) {
     return NextResponse.json({ success: false, message: error.message }, { status: 500 });

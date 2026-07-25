@@ -8,7 +8,7 @@ export default function AdminUsers() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // Modal states
   const [editingUser, setEditingUser] = useState(null);
   const [editFormData, setEditFormData] = useState({ name: "", role: "", status: "" });
@@ -19,7 +19,7 @@ export default function AdminUsers() {
 
   async function handleUpdateStatus(userId, status) {
     if (!confirm(`Are you sure you want to ${status} this user?`)) return;
-    
+
     try {
       const res = await fetch("/api/admin/users/status", {
         method: "POST",
@@ -40,7 +40,7 @@ export default function AdminUsers() {
 
   async function handleDelete(userId) {
     if (!confirm(`Are you sure you want to delete this user? (Soft delete)`)) return;
-    
+
     try {
       const res = await fetch("/api/admin/users/delete", {
         method: "POST",
@@ -70,11 +70,11 @@ export default function AdminUsers() {
       const res = await fetch("/api/admin/users/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ 
-          userId: editingUser, 
-          name: editFormData.name, 
-          role: editFormData.role, 
-          status: editFormData.status 
+        body: JSON.stringify({
+          userId: editingUser,
+          name: editFormData.name,
+          role: editFormData.role,
+          status: editFormData.status
         }),
       });
       const result = await res.json();
@@ -161,13 +161,13 @@ export default function AdminUsers() {
                       <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
                         {user.status === 'pending' ? (
                           <>
-                            <button 
+                            <button
                               onClick={() => handleUpdateStatus(user.id, "approved")}
                               style={{ padding: "0.25rem 0.5rem", background: "var(--success)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer" }}
                             >
                               Approve
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleUpdateStatus(user.id, "rejected")}
                               style={{ padding: "0.25rem 0.5rem", background: "var(--danger)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer" }}
                             >
@@ -176,13 +176,13 @@ export default function AdminUsers() {
                           </>
                         ) : (
                           <>
-                            <button 
+                            <button
                               onClick={() => openEditModal(user)}
                               style={{ padding: "0.25rem 0.5rem", background: "var(--primary)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
                             >
                               <Edit size={12} /> Edit
                             </button>
-                            <button 
+                            <button
                               onClick={() => handleDelete(user.id)}
                               style={{ padding: "0.25rem 0.5rem", background: "var(--danger)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
                             >
@@ -207,21 +207,21 @@ export default function AdminUsers() {
             <form onSubmit={submitEdit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
               <div className="input-group">
                 <label className="input-label">Name</label>
-                <input 
-                  type="text" 
-                  className="input-field" 
-                  value={editFormData.name} 
-                  onChange={(e) => setEditFormData({...editFormData, name: e.target.value})}
-                  required 
+                <input
+                  type="text"
+                  className="input-field"
+                  value={editFormData.name}
+                  onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
+                  required
                 />
               </div>
-              
+
               <div className="input-group">
                 <label className="input-label">Role</label>
-                <select 
-                  className="input-field" 
+                <select
+                  className="input-field"
                   value={editFormData.role}
-                  onChange={(e) => setEditFormData({...editFormData, role: e.target.value})}
+                  onChange={(e) => setEditFormData({ ...editFormData, role: e.target.value })}
                 >
                   <option value="user" style={{ background: "var(--bg-secondary)" }}>User</option>
                   <option value="admin" style={{ background: "var(--bg-secondary)" }}>Admin</option>
@@ -230,10 +230,10 @@ export default function AdminUsers() {
 
               <div className="input-group">
                 <label className="input-label">Status</label>
-                <select 
-                  className="input-field" 
+                <select
+                  className="input-field"
                   value={editFormData.status}
-                  onChange={(e) => setEditFormData({...editFormData, status: e.target.value})}
+                  onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
                 >
                   <option value="approved" style={{ background: "var(--bg-secondary)" }}>Approved</option>
                   <option value="pending" style={{ background: "var(--bg-secondary)" }}>Pending</option>
