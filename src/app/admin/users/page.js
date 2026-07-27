@@ -131,6 +131,7 @@ export default function AdminUsers() {
 
 
   return (
+    <>
     <div className="animate-fade-in">
       <div className="flex-responsive" style={{ marginBottom: "2rem" }}>
         <h1>Data Users</h1>
@@ -232,6 +233,7 @@ export default function AdminUsers() {
           </tbody>
         </table>
       </div>
+      </div>
 
       {editingUser && (
         <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(15, 23, 42, 0.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999 }}>
@@ -309,6 +311,6 @@ export default function AdminUsers() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
