@@ -83,14 +83,23 @@ export default function AdminLayout({ children }) {
           </nav>
         </div>
 
-        <div style={{ marginTop: "auto", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "1rem", display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }} onClick={handleLogout} title="Click to Logout">
-          <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#f59e0b", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
-            <UserIcon size={24} color="#0f172a" />
+        <div style={{ marginTop: "auto", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "1rem", display: "flex", flexDirection: "column", gap: "1rem" }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+            <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#f59e0b", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden", flexShrink: 0 }}>
+              <UserIcon size={24} color="#0f172a" />
+            </div>
+            <div style={{ flex: 1, overflow: "hidden" }}>
+              <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: "600", color: "#f8fafc", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>{adminUser?.name || "Admin User"}</p>
+              <p style={{ margin: 0, fontSize: "0.65rem", color: "var(--text-secondary)", letterSpacing: "0.05em" }}>ADMINISTRATOR</p>
+            </div>
           </div>
-          <div style={{ flex: 1, overflow: "hidden" }}>
-            <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: "600", color: "#f8fafc", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>{adminUser?.name || "Admin User"}</p>
-            <p style={{ margin: 0, fontSize: "0.65rem", color: "var(--text-secondary)", letterSpacing: "0.05em" }}>ADMINISTRATOR</p>
-          </div>
+          <button 
+            onClick={handleLogout}
+            className="btn"
+            style={{ width: "100%", justifyContent: "center", background: "rgba(239, 68, 68, 0.1)", color: "#ef4444", border: "1px solid rgba(239, 68, 68, 0.2)", padding: "0.75rem 1rem", borderRadius: "0.5rem" }}
+          >
+            <LogOut size={18} /> Logout
+          </button>
         </div>
       </aside>
 
