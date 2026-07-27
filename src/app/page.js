@@ -131,16 +131,16 @@ export default function Home() {
       const maxWidth = 400;
       let width = videoRef.current.videoWidth;
       let height = videoRef.current.videoHeight;
-      
+
       if (width > maxWidth) {
         height = Math.floor(height * (maxWidth / width));
         width = maxWidth;
       }
-      
+
       canvasRef.current.width = width;
       canvasRef.current.height = height;
       context.drawImage(videoRef.current, 0, 0, width, height);
-      
+
       // Compress with 0.6 quality
       const dataUrl = canvasRef.current.toDataURL("image/jpeg", 0.6);
       setPhotoBase64(dataUrl);
@@ -193,11 +193,12 @@ export default function Home() {
     }
   }
 
-  if (loading || fetchingStatus) return <div className="flex-center min-h-screen"><div className="spinner"></div></div>;
+  if (loading || fetchingStatus) return <div className="theme-light"><div className="flex-center min-h-screen"><div className="spinner"></div></div></div>;
   if (!user) return null;
 
   return (
-    <div className="container" style={{ padding: "2rem 1.5rem" }}>
+    <div className="theme-light">
+      <div className="container" style={{ padding: "2rem 1.5rem" }}>
       <header className="flex-responsive" style={{ marginBottom: "2rem" }}>
         <div>
           <h2>Halo, {user.name}!</h2>
@@ -313,6 +314,7 @@ export default function Home() {
         )}
 
       </main>
+      </div>
     </div>
   );
 }

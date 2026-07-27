@@ -95,7 +95,7 @@ export default function AdminLayout({ children }) {
       </aside>
 
       {/* Main Content */}
-      <main className="admin-main">
+      <main className="admin-main theme-light">
         <div className="container" style={{ maxWidth: "1200px", padding: 0 }}>
           {/* Mobile Header for Sidebar Toggle */}
           {!sidebarOpen && (

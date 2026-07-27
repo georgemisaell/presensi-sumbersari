@@ -134,7 +134,7 @@ export default function AdminUsers() {
     <div className="animate-fade-in">
       <div className="flex-responsive" style={{ marginBottom: "2rem" }}>
         <h1>Data Users</h1>
-        <div className="badge badge-success">Total: {users.filter(u => u.status !== 'deleted').length} Active Users</div>
+        <div className="badge badge-success">Total: {users.filter(u => u.status !== 'deleted').length} Users</div>
       </div>
 
       {error && <div style={{ color: "var(--danger)", marginBottom: "1rem" }}>Error: {error}</div>}
