@@ -6,6 +6,7 @@ import { UserCog, Edit, Trash2 } from "lucide-react";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
+  const [currentUser, setCurrentUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -72,33 +73,49 @@ export default function AdminUsers() {
 
   async function submitEdit(e) {
     e.preventDefault();
+    
+    // Optimistic UI Update
+    const originalUsers = [...users];
+    const userIdToUpdate = editingUser;
+    const updatedData = { ...editFormData };
+    
+    setUsers(users.map(u => u.id === userIdToUpdate ? { ...u, ...updatedData } : u));
+    setEditingUser(null); // Close modal immediately
+
     try {
       const res = await fetch("/api/admin/users/update", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId: editingUser,
-          name: editFormData.name,
-          role: editFormData.role,
-          status: editFormData.status
+          userId: userIdToUpdate,
+          name: updatedData.name,
+          role: updatedData.role,
+          status: updatedData.status
         }),
       });
       const result = await res.json();
-      if (result.success) {
-        setUsers(users.map(u => u.id === editingUser ? { ...u, ...editFormData } : u));
-        setEditingUser(null);
-        alert(`User updated successfully!`);
-      } else {
+      if (!result.success) {
+        setUsers(originalUsers); // Revert on failure
         alert("Failed: " + result.message);
       }
     } catch (err) {
+      setUsers(originalUsers); // Revert on error
       alert("Error updating user");
     }
   }
 
   async function fetchUsers() {
     try {
-      const res = await fetch("/api/admin/users");
+      const [res, meRes] = await Promise.all([
+        fetch("/api/admin/users"),
+        fetch("/api/auth/me")
+      ]);
+      
+      if (meRes.ok) {
+        const meResult = await meRes.json();
+        setCurrentUser(meResult.user);
+      }
+      
       const result = await res.json();
       if (result.success) {
         setUsers(result.data);
@@ -165,7 +182,9 @@ export default function AdminUsers() {
                     </td>
                     <td>
                       <div style={{ display: "flex", gap: "0.5rem", alignItems: "center" }}>
-                        {user.status === 'pending' ? (
+                        {currentUser && user.id === currentUser.id ? (
+                          <span style={{ color: "var(--text-secondary)", fontSize: "0.75rem", fontStyle: "italic", padding: "0.25rem 0" }}>Akun Anda (Current)</span>
+                        ) : user.status === 'pending' ? (
                           <>
                             <button
                               onClick={() => handleUpdateStatus(user.id, "approved")}

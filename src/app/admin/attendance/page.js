@@ -10,8 +10,9 @@ export default function AdminAttendance() {
   const [error, setError] = useState("");
   
   // Filter state
-  const [filterType, setFilterType] = useState("all"); // 'all', 'date', 'month'
-  const [filterValue, setFilterValue] = useState("");
+  const [filterType, setFilterType] = useState("date"); // 'all', 'date', 'month'
+  const [filterValue, setFilterValue] = useState(format(new Date(), "yyyy-MM-dd"));
+  const [filterAttendanceType, setFilterAttendanceType] = useState("Check In"); // 'all', 'Check In', 'Check Out'
 
   useEffect(() => {
     fetchAttendance();
@@ -96,6 +97,12 @@ export default function AdminAttendance() {
     }
   }
 
+  const filteredRecords = records.filter(rec => {
+    if (filterAttendanceType === "all") return true;
+    const recType = rec.type || "Check In";
+    return recType === filterAttendanceType;
+  });
+
   return (
     <div className="animate-fade-in">
       <div className="flex-responsive" style={{ marginBottom: "2rem" }}>
@@ -136,6 +143,19 @@ export default function AdminAttendance() {
               onChange={(e) => setFilterValue(e.target.value)}
             />
           )}
+
+          <div style={{ width: "1px", height: "24px", background: "var(--glass-border)", margin: "0 0.5rem" }}></div>
+
+          <select 
+            className="input-field" 
+            style={{ padding: "0.5rem", minWidth: "140px" }}
+            value={filterAttendanceType}
+            onChange={(e) => setFilterAttendanceType(e.target.value)}
+          >
+            <option value="all">Semua Tipe</option>
+            <option value="Check In">Hanya Check In</option>
+            <option value="Check Out">Hanya Check Out</option>
+          </select>
         </div>
       </div>
 
@@ -148,6 +168,7 @@ export default function AdminAttendance() {
               <th>Tanggal</th>
               <th>Waktu</th>
               <th>Nama Pegawai</th>
+              <th>Tipe</th>
               <th>Status</th>
               <th>Lokasi</th>
               <th>Foto</th>
@@ -157,22 +178,27 @@ export default function AdminAttendance() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center", padding: "2rem" }}>
+                <td colSpan="8" style={{ textAlign: "center", padding: "2rem" }}>
                   <div className="flex-center"><div className="spinner"></div></div>
                 </td>
               </tr>
             ) : records.length === 0 ? (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center", padding: "2rem" }}>Belum ada data presensi</td>
+                <td colSpan="8" style={{ textAlign: "center", padding: "2rem" }}>Belum ada data presensi</td>
               </tr>
             ) : (
-              records.map((rec, idx) => (
+              filteredRecords.map((rec, idx) => (
                 <tr key={idx}>
                   <td style={{ fontWeight: 500 }}>{rec.date}</td>
                   <td>{rec.time}</td>
                   <td>{rec.userName}</td>
                   <td>
-                    <span className={`badge ${rec.status === 'Terlambat' ? 'badge-danger' : rec.status === 'Hadir' || rec.status === 'Tepat Waktu' ? 'badge-success' : 'badge-warning'}`}>
+                    <span className={`badge ${rec.type === 'Check Out' ? 'badge-primary' : 'badge-secondary'}`} style={{ background: rec.type === 'Check Out' ? 'var(--primary)' : 'var(--text-secondary)', color: 'white' }}>
+                      {rec.type || 'Check In'}
+                    </span>
+                  </td>
+                  <td>
+                    <span className={`badge ${rec.status === 'Terlambat' || rec.status === 'Pulang Cepat' ? 'badge-danger' : rec.status === 'Hadir' || rec.status === 'Tepat Waktu' ? 'badge-success' : 'badge-warning'}`}>
                       {rec.status}
                     </span>
                   </td>

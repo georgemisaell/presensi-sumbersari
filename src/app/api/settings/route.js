@@ -1,0 +1,52 @@
+import { NextResponse } from "next/server";
+import { getSession } from "@/lib/session";
+
+export async function GET() {
+  try {
+    const session = await getSession();
+    if (!session || !session.user || session.user.role !== "admin") {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    const gasUrl = process.env.GAS_URL;
+    if (!gasUrl) {
+      return NextResponse.json({ success: false, message: "Server misconfiguration" }, { status: 500 });
+    }
+
+    const response = await fetch(`${gasUrl}?action=getSettings`, {
+      cache: 'no-store'
+    });
+    
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
+
+export async function POST(request) {
+  try {
+    const session = await getSession();
+    if (!session || !session.user || session.user.role !== "admin") {
+      return NextResponse.json({ success: false, message: "Unauthorized" }, { status: 401 });
+    }
+
+    const body = await request.json();
+    const gasUrl = process.env.GAS_URL;
+    
+    if (!gasUrl) {
+      return NextResponse.json({ success: false, message: "Server misconfiguration" }, { status: 500 });
+    }
+
+    const response = await fetch(`${gasUrl}?action=updateSettings`, {
+      method: "POST",
+      headers: { "Content-Type": "text/plain;charset=utf-8" },
+      body: JSON.stringify(body),
+    });
+
+    const data = await response.json();
+    return NextResponse.json(data);
+  } catch (error) {
+    return NextResponse.json({ success: false, message: error.message }, { status: 500 });
+  }
+}
