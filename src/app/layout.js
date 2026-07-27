@@ -3,6 +3,9 @@ import "./globals.css";
 export const metadata = {
   title: "Presensi Sumbersari",
   description: "Aplikasi Presensi Online Sumbersari",
+  icons: {
+    icon: '/logo-kabupaten-madiun.webp',
+  },
 };
 
 export default function RootLayout({ children }) {
