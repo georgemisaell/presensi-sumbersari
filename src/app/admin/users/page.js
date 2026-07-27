@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { UserCog, Edit, Trash2 } from "lucide-react";
+import { UserCog, Edit, Trash2, Check, X } from "lucide-react";
 
 export default function AdminUsers() {
   const [users, setUsers] = useState([]);
@@ -20,12 +20,12 @@ export default function AdminUsers() {
         fetch("/api/admin/users"),
         fetch("/api/auth/me")
       ]);
-      
+
       if (meRes.ok) {
         const meResult = await meRes.json();
         setCurrentUser(meResult.user);
       }
-      
+
       const result = await res.json();
       if (result.success) {
         setUsers(result.data);
@@ -97,12 +97,12 @@ export default function AdminUsers() {
 
   async function submitEdit(e) {
     e.preventDefault();
-    
+
     // Optimistic UI Update
     const originalUsers = [...users];
     const userIdToUpdate = editingUser;
     const updatedData = { ...editFormData };
-    
+
     setUsers(users.map(u => u.id === userIdToUpdate ? { ...u, ...updatedData } : u));
     setEditingUser(null); // Close modal immediately
 
@@ -196,30 +196,30 @@ export default function AdminUsers() {
                           <>
                             <button
                               onClick={() => handleUpdateStatus(user.id, "approved")}
-                              style={{ padding: "0.25rem 0.5rem", background: "var(--success)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer" }}
+                              className="btn-action btn-action-success"
                             >
-                              Approve
+                              <Check size={14} /> Approve
                             </button>
                             <button
                               onClick={() => handleUpdateStatus(user.id, "rejected")}
-                              style={{ padding: "0.25rem 0.5rem", background: "var(--danger)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer" }}
+                              className="btn-action btn-action-delete"
                             >
-                              Reject
+                              <X size={14} /> Reject
                             </button>
                           </>
                         ) : (
                           <>
                             <button
                               onClick={() => openEditModal(user)}
-                              style={{ padding: "0.25rem 0.5rem", background: "var(--primary)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
+                              className="btn-action btn-action-edit"
                             >
-                              <Edit size={12} /> Edit
+                              <Edit size={14} /> Edit
                             </button>
                             <button
                               onClick={() => handleDelete(user.id)}
-                              style={{ padding: "0.25rem 0.5rem", background: "var(--danger)", color: "white", borderRadius: "var(--radius-sm)", fontSize: "0.75rem", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "4px" }}
+                              className="btn-action btn-action-delete"
                             >
-                              <Trash2 size={12} /> Delete
+                              <Trash2 size={14} /> Delete
                             </button>
                           </>
                         )}

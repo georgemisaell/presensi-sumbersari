@@ -3,13 +3,14 @@
 import { useEffect, useState } from "react";
 import { useRouter, usePathname } from "next/navigation";
 import Link from "next/link";
-import { LayoutDashboard, Users, CalendarDays, LogOut, Loader2, Menu, X } from "lucide-react";
+import { LayoutDashboard, Users, ClipboardCheck, Clock, LogOut, Loader2, Menu, X, User as UserIcon } from "lucide-react";
 
 export default function AdminLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [adminUser, setAdminUser] = useState(null);
 
   useEffect(() => {
     checkAdmin();
@@ -21,6 +22,7 @@ export default function AdminLayout({ children }) {
       if (res.ok) {
         const data = await res.json();
         if (data.user && data.user.role === "admin") {
+          setAdminUser(data.user);
           setLoading(false);
         } else {
           router.push("/");
@@ -43,41 +45,53 @@ export default function AdminLayout({ children }) {
   return (
     <div className="admin-layout">
       {/* Mobile Sidebar Overlay */}
-      <div 
+      <div
         className={`sidebar-overlay ${sidebarOpen ? 'open' : ''}`}
         onClick={() => setSidebarOpen(false)}
       ></div>
 
       {/* Sidebar */}
-      <aside className={`glass-panel admin-sidebar ${sidebarOpen ? 'open' : ''}`}>
-        <div style={{ marginBottom: "2rem", paddingLeft: "1rem", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <h2 style={{ fontSize: "1.25rem", background: "var(--accent-gradient)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Presensi Admin</h2>
-          <button 
-            className="mobile-menu-btn" 
-            onClick={() => setSidebarOpen(false)}
-          >
-            <X size={20} />
-          </button>
+      <aside className={`glass-panel admin-sidebar ${sidebarOpen ? 'open' : ''}`} style={{ padding: "1.5rem 1rem", justifyContent: "space-between", background: "#0f172a" }}>
+        <div>
+          <div style={{ marginBottom: "2rem", display: "flex", flexDirection: "column", alignItems: "center", position: "relative" }}>
+            <img src="/logo-kabupaten-madiun.webp" alt="Logo Madiun" style={{ width: "200px", height: "auto", marginBottom: "1rem" }} />
+            <h2 style={{ fontSize: "0.75rem", color: "var(--text-secondary)", textAlign: "center", fontWeight: "normal", lineHeight: "1.4" }}>
+              Desa Sumbersari, Kec. Saradan,<br />Kab. Madiun
+            </h2>
+            <button
+              className="mobile-menu-btn"
+              onClick={() => setSidebarOpen(false)}
+              style={{ position: "absolute", right: 0, top: 0 }}
+            >
+              <X size={20} />
+            </button>
+          </div>
+
+          <nav style={{ display: "flex", flexDirection: "column", gap: "0.5rem" }}>
+            <Link href="/admin/dashboard" onClick={() => setSidebarOpen(false)} className="btn" style={{ justifyContent: "flex-start", background: pathname === "/admin/dashboard" ? "#6366f1" : "transparent", color: pathname === "/admin/dashboard" ? "#ffffff" : "var(--text-secondary)", boxShadow: "none", padding: "0.75rem 1rem", borderRadius: "0.5rem" }}>
+              <LayoutDashboard size={18} /> Dashboard
+            </Link>
+            <Link href="/admin/users" onClick={() => setSidebarOpen(false)} className="btn" style={{ justifyContent: "flex-start", background: pathname === "/admin/users" ? "#6366f1" : "transparent", color: pathname === "/admin/users" ? "#ffffff" : "var(--text-secondary)", boxShadow: "none", padding: "0.75rem 1rem", borderRadius: "0.5rem" }}>
+              <Users size={18} /> User Management
+            </Link>
+            <Link href="/admin/attendance" onClick={() => setSidebarOpen(false)} className="btn" style={{ justifyContent: "flex-start", background: pathname === "/admin/attendance" ? "#6366f1" : "transparent", color: pathname === "/admin/attendance" ? "#ffffff" : "var(--text-secondary)", boxShadow: "none", padding: "0.75rem 1rem", borderRadius: "0.5rem" }}>
+              <ClipboardCheck size={18} /> Data Presensi
+            </Link>
+            <Link href="/admin/settings" onClick={() => setSidebarOpen(false)} className="btn" style={{ justifyContent: "flex-start", background: pathname === "/admin/settings" ? "#6366f1" : "transparent", color: pathname === "/admin/settings" ? "#ffffff" : "var(--text-secondary)", boxShadow: "none", padding: "0.75rem 1rem", borderRadius: "0.5rem" }}>
+              <Clock size={18} /> Pengaturan Jam
+            </Link>
+          </nav>
         </div>
 
-        <nav style={{ flex: 1, display: "flex", flexDirection: "column", gap: "0.5rem" }}>
-          <Link href="/admin/dashboard" onClick={() => setSidebarOpen(false)} className={`btn ${pathname === "/admin/dashboard" ? "btn-primary" : ""}`} style={{ justifyContent: "flex-start", background: pathname === "/admin/dashboard" ? "" : "transparent", boxShadow: "none" }}>
-            <LayoutDashboard size={18} /> Dashboard
-          </Link>
-          <Link href="/admin/users" onClick={() => setSidebarOpen(false)} className={`btn ${pathname === "/admin/users" ? "btn-primary" : ""}`} style={{ justifyContent: "flex-start", background: pathname === "/admin/users" ? "" : "transparent", boxShadow: "none" }}>
-            <Users size={18} /> Data Users
-          </Link>
-          <Link href="/admin/attendance" onClick={() => setSidebarOpen(false)} className={`btn ${pathname === "/admin/attendance" ? "btn-primary" : ""}`} style={{ justifyContent: "flex-start", background: pathname === "/admin/attendance" ? "" : "transparent", boxShadow: "none" }}>
-            <CalendarDays size={18} /> Data Presensi
-          </Link>
-          <Link href="/admin/settings" onClick={() => setSidebarOpen(false)} className={`btn ${pathname === "/admin/settings" ? "btn-primary" : ""}`} style={{ justifyContent: "flex-start", background: pathname === "/admin/settings" ? "" : "transparent", boxShadow: "none" }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12.22 2h-.44a2 2 0 0 0-2 2v.18a2 2 0 0 1-1 1.73l-.43.25a2 2 0 0 1-2 0l-.15-.08a2 2 0 0 0-2.73.73l-.22.38a2 2 0 0 0 .73 2.73l.15.1a2 2 0 0 1 1 1.72v.51a2 2 0 0 1-1 1.74l-.15.09a2 2 0 0 0-.73 2.73l.22.38a2 2 0 0 0 2.73.73l.15-.08a2 2 0 0 1 2 0l.43.25a2 2 0 0 1 1 1.73V20a2 2 0 0 0 2 2h.44a2 2 0 0 0 2-2v-.18a2 2 0 0 1 1-1.73l.43-.25a2 2 0 0 1 2 0l.15.08a2 2 0 0 0 2.73-.73l.22-.39a2 2 0 0 0-.73-2.73l-.15-.08a2 2 0 0 1-1-1.74v-.5a2 2 0 0 1 1-1.74l.15-.09a2 2 0 0 0 .73-2.73l-.22-.38a2 2 0 0 0-2.73-.73l-.15.08a2 2 0 0 1-2 0l-.43-.25a2 2 0 0 1-1-1.73V4a2 2 0 0 0-2-2z"></path><circle cx="12" cy="12" r="3"></circle></svg> Pengaturan Jam
-          </Link>
-        </nav>
-
-        <button onClick={handleLogout} className="btn" style={{ justifyContent: "flex-start", color: "var(--danger)", background: "transparent", border: "1px solid rgba(239,68,68,0.2)" }}>
-          <LogOut size={18} /> Logout
-        </button>
+        <div style={{ marginTop: "auto", borderTop: "1px solid rgba(255,255,255,0.1)", paddingTop: "1rem", display: "flex", alignItems: "center", gap: "0.75rem", cursor: "pointer" }} onClick={handleLogout} title="Click to Logout">
+          <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#f59e0b", display: "flex", alignItems: "center", justifyContent: "center", overflow: "hidden" }}>
+            <UserIcon size={24} color="#0f172a" />
+          </div>
+          <div style={{ flex: 1, overflow: "hidden" }}>
+            <p style={{ margin: 0, fontSize: "0.875rem", fontWeight: "600", color: "#f8fafc", whiteSpace: "nowrap", textOverflow: "ellipsis", overflow: "hidden" }}>{adminUser?.name || "Admin User"}</p>
+            <p style={{ margin: 0, fontSize: "0.65rem", color: "var(--text-secondary)", letterSpacing: "0.05em" }}>ADMINISTRATOR</p>
+          </div>
+        </div>
       </aside>
 
       {/* Main Content */}
@@ -91,7 +105,7 @@ export default function AdminLayout({ children }) {
               </button>
             </div>
           )}
-          
+
           {children}
         </div>
       </main>

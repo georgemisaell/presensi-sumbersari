@@ -70,7 +70,7 @@ export default function AdminSettings() {
         <h1>Pengaturan Jam Absensi</h1>
       </div>
 
-      <div className="glass-card" style={{ maxWidth: "600px" }}>
+      <div className="glass-card" style={{ width: "100%" }}>
         {error && (
           <div style={{ padding: "1rem", borderRadius: "var(--radius-md)", marginBottom: "1rem", background: "rgba(239, 68, 68, 0.1)", color: "var(--danger)" }}>
             {error}
@@ -97,7 +97,7 @@ export default function AdminSettings() {
               required
             />
             <small style={{ color: "var(--text-secondary)", marginTop: "0.5rem", display: "block" }}>
-              Contoh: Jika diatur 08:00, absen masuk pukul 08:01 akan tercatat sebagai "Terlambat".
+              Contoh: Jika diatur 08:00, absen masuk pukul 08:01 akan tercatat sebagai &quot;Terlambat&quot;.
             </small>
           </div>
 
@@ -113,11 +113,11 @@ export default function AdminSettings() {
               required
             />
             <small style={{ color: "var(--text-secondary)", marginTop: "0.5rem", display: "block" }}>
-              Contoh: Jika diatur 17:00, absen pulang pukul 16:59 akan tercatat sebagai "Pulang Cepat".
+              Contoh: Jika diatur 17:00, absen pulang pukul 16:59 akan tercatat sebagai &quot;Pulang Cepat&quot;.
             </small>
           </div>
 
-          <button type="submit" className="btn btn-primary" disabled={saving} style={{ marginTop: "1rem", justifyContent: "center" }}>
+          <button type="submit" className="btn btn-indigo" disabled={saving} style={{ marginTop: "1rem", justifyContent: "center" }}>
             {saving ? <div className="spinner"></div> : <><Save size={18} /> Simpan Pengaturan</>}
           </button>
         </form>

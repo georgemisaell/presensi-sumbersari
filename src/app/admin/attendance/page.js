@@ -195,7 +195,7 @@ export default function AdminAttendance() {
                   <td>{rec.userName}</td>
                   <td>{rec.jabatan || "-"}</td>
                   <td>
-                    <span className={`badge ${rec.type === 'Check Out' ? 'badge-primary' : 'badge-secondary'}`} style={{ background: rec.type === 'Check Out' ? 'var(--primary)' : 'var(--text-secondary)', color: 'white' }}>
+                    <span className={`badge ${rec.type === 'Check Out' ? 'badge-primary' : 'badge-secondary'}`}>
                       {rec.type || 'Check In'}
                     </span>
                   </td>
@@ -218,10 +218,10 @@ export default function AdminAttendance() {
                   </td>
                   <td>
                     <div style={{ display: "flex", gap: "0.5rem" }}>
-                      <button onClick={() => updateStatus(rec.id, rec.status)} className="btn btn-secondary" style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}>
+                      <button onClick={() => updateStatus(rec.id, rec.status)} className="btn-action btn-action-edit">
                         <Edit size={14} /> Update
                       </button>
-                      <button onClick={() => deleteRecord(rec.id)} className="btn btn-danger" style={{ padding: "0.25rem 0.5rem", fontSize: "0.75rem" }}>
+                      <button onClick={() => deleteRecord(rec.id)} className="btn-action btn-action-delete">
                         <Trash2 size={14} /> Hapus
                       </button>
                     </div>
