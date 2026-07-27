@@ -15,14 +15,23 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const nomorHp = e.target.nomorHp.value;
+    let rawNomorHp = e.target.nomorHp.value;
     const password = e.target.password.value;
 
     const phoneRegex = /^[0-9]+$/;
-    if (!phoneRegex.test(nomorHp)) {
+    if (!phoneRegex.test(rawNomorHp)) {
       setError("Nomor HP hanya boleh berisi angka.");
       setLoading(false);
       return;
+    }
+
+    let nomorHp = rawNomorHp;
+    if (rawNomorHp.startsWith("0")) {
+      nomorHp = "62" + rawNomorHp;
+    } else if (rawNomorHp.startsWith("62")) {
+      nomorHp = rawNomorHp;
+    } else {
+      nomorHp = "62" + rawNomorHp;
     }
 
     try {
@@ -70,9 +79,12 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit}>
           <div className="input-group">
             <label className="input-label">Nomor HP (WhatsApp)</label>
-            <div style={{ position: "relative" }}>
-              <Phone size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <input type="tel" name="nomorHp" required className="input-field" placeholder="081234567890" style={{ paddingLeft: "2.75rem" }} pattern="[0-9]+" title="Nomor HP hanya boleh berisi angka" />
+            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+              <div style={{ position: "absolute", left: "1rem", color: "var(--text-secondary)", fontWeight: "500", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                <Phone size={18} />
+                <span>+62</span>
+              </div>
+              <input type="tel" name="nomorHp" required className="input-field" placeholder="81234567890" style={{ paddingLeft: "4.5rem" }} pattern="[0-9]+" title="Nomor HP hanya boleh berisi angka" />
             </div>
           </div>
 

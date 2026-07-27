@@ -168,6 +168,7 @@ export default function AdminAttendance() {
               <th>Tanggal</th>
               <th>Waktu</th>
               <th>Nama Pegawai</th>
+              <th>Jabatan</th>
               <th>Tipe</th>
               <th>Status</th>
               <th>Lokasi</th>
@@ -178,13 +179,13 @@ export default function AdminAttendance() {
           <tbody>
             {loading ? (
               <tr>
-                <td colSpan="8" style={{ textAlign: "center", padding: "2rem" }}>
+                <td colSpan="9" style={{ textAlign: "center", padding: "2rem" }}>
                   <div className="flex-center"><div className="spinner"></div></div>
                 </td>
               </tr>
             ) : records.length === 0 ? (
               <tr>
-                <td colSpan="8" style={{ textAlign: "center", padding: "2rem" }}>Belum ada data presensi</td>
+                <td colSpan="9" style={{ textAlign: "center", padding: "2rem" }}>Belum ada data presensi</td>
               </tr>
             ) : (
               filteredRecords.map((rec, idx) => (
@@ -192,6 +193,7 @@ export default function AdminAttendance() {
                   <td style={{ fontWeight: 500 }}>{rec.date}</td>
                   <td>{rec.time}</td>
                   <td>{rec.userName}</td>
+                  <td>{rec.jabatan || "-"}</td>
                   <td>
                     <span className={`badge ${rec.type === 'Check Out' ? 'badge-primary' : 'badge-secondary'}`} style={{ background: rec.type === 'Check Out' ? 'var(--primary)' : 'var(--text-secondary)', color: 'white' }}>
                       {rec.type || 'Check In'}

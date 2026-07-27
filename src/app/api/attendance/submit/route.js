@@ -65,6 +65,7 @@ export async function POST(request) {
       ...body,
       userId: session.user.id,
       userName: session.user.name,
+      jabatan: session.user.jabatan,
       type: type,
       status: statusKehadiran // Menimpa "Hadir" yang dikirim oleh Frontend
     };
