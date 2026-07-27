@@ -4,6 +4,17 @@ import crypto from "crypto";
 export async function POST(request) {
   try {
     const body = await request.json();
+
+    const nameRegex = /^[a-zA-Z\s.,']+$/;
+    if (body.name && !nameRegex.test(body.name)) {
+      return NextResponse.json({ success: false, message: "Nama tidak boleh mengandung karakter spesial/angka." }, { status: 400 });
+    }
+
+    const phoneRegex = /^[0-9]+$/;
+    if (body.nomorHp && !phoneRegex.test(body.nomorHp)) {
+      return NextResponse.json({ success: false, message: "Nomor HP hanya boleh berisi angka." }, { status: 400 });
+    }
+
     const gasUrl = process.env.GAS_URL;
 
     if (!gasUrl) {
@@ -13,7 +24,7 @@ export async function POST(request) {
     if (body.password) {
       const secret = process.env.JWT_SECRET || "default_secret";
       body.password = crypto.createHash("sha256").update(body.password + secret).digest("hex");
-      console.log("[REGISTER] Email:", body.email, " | Hashed Password:", body.password);
+      console.log("[REGISTER] Nomor HP:", body.nomorHp, " | Hashed Password:", body.password);
     }
 
     const response = await fetch(`${gasUrl}?action=register`, {

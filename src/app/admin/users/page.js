@@ -12,7 +12,7 @@ export default function AdminUsers() {
 
   // Modal states
   const [editingUser, setEditingUser] = useState(null);
-  const [editFormData, setEditFormData] = useState({ name: "", role: "", status: "" });
+  const [editFormData, setEditFormData] = useState({ name: "", jabatan: "", role: "", status: "" });
 
   useEffect(() => {
     fetchUsers();
@@ -68,7 +68,7 @@ export default function AdminUsers() {
 
   function openEditModal(user) {
     setEditingUser(user.id);
-    setEditFormData({ name: user.name, role: user.role, status: user.status || "approved" });
+    setEditFormData({ name: user.name, jabatan: user.jabatan || "", role: user.role, status: user.status || "approved" });
   }
 
   async function submitEdit(e) {
@@ -89,6 +89,7 @@ export default function AdminUsers() {
         body: JSON.stringify({
           userId: userIdToUpdate,
           name: updatedData.name,
+          jabatan: updatedData.jabatan,
           role: updatedData.role,
           status: updatedData.status
         }),
@@ -145,7 +146,8 @@ export default function AdminUsers() {
             <tr>
               <th>ID</th>
               <th>Name</th>
-              <th>Email</th>
+              <th>Nomor HP</th>
+              <th>Jabatan</th>
               <th>Role</th>
               <th>Status</th>
               <th>Joined At</th>
@@ -166,7 +168,8 @@ export default function AdminUsers() {
                       {user.id ? user.id.substring(0, 8) + '...' : '-'}
                     </td>
                     <td style={{ fontWeight: 500 }}>{user.name}</td>
-                    <td>{user.email}</td>
+                    <td>{user.nomorHp}</td>
+                    <td>{user.jabatan || "-"}</td>
                     <td>
                       <span className={`badge ${user.role === 'admin' ? 'badge-warning' : 'badge-success'}`}>
                         {user.role}
@@ -239,6 +242,26 @@ export default function AdminUsers() {
                   onChange={(e) => setEditFormData({ ...editFormData, name: e.target.value })}
                   required
                 />
+              </div>
+
+              <div className="input-group">
+                <label className="input-label">Jabatan</label>
+                <select
+                  className="input-field"
+                  value={editFormData.jabatan}
+                  onChange={(e) => setEditFormData({ ...editFormData, jabatan: e.target.value })}
+                >
+                  <option value="" style={{ background: "var(--bg-secondary)" }}>-</option>
+                  <option value="Kepala Desa" style={{ background: "var(--bg-secondary)" }}>Kepala Desa</option>
+                  <option value="Sekretaris Desa" style={{ background: "var(--bg-secondary)" }}>Sekretaris Desa</option>
+                  <option value="Kaur Keuangan" style={{ background: "var(--bg-secondary)" }}>Kaur Keuangan</option>
+                  <option value="Kaur Perencanaan" style={{ background: "var(--bg-secondary)" }}>Kaur Perencanaan</option>
+                  <option value="Kaur Umum dan TU" style={{ background: "var(--bg-secondary)" }}>Kaur Umum dan TU</option>
+                  <option value="Kasi Pemerintahan" style={{ background: "var(--bg-secondary)" }}>Kasi Pemerintahan</option>
+                  <option value="Kasi Pelayanan" style={{ background: "var(--bg-secondary)" }}>Kasi Pelayanan</option>
+                  <option value="Kamituwo Dusun Kenep" style={{ background: "var(--bg-secondary)" }}>Kamituwo Dusun Kenep</option>
+                  <option value="Karyawan Desa" style={{ background: "var(--bg-secondary)" }}>Karyawan Desa</option>
+                </select>
               </div>
 
               <div className="input-group">

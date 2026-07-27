@@ -15,7 +15,7 @@ export async function POST(request) {
     }
 
     const body = await request.json();
-    const { userId, name, role, status } = body;
+    const { userId, name, jabatan, role, status } = body;
 
     if (!userId) {
       return NextResponse.json({ success: false, message: "Missing userId" }, { status: 400 });
@@ -25,6 +25,7 @@ export async function POST(request) {
       action: "updateUser",
       userId: userId,
       name: name,
+      jabatan: jabatan,
       role: role,
       status: status
     };

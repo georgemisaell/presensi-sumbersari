@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { LogIn, Mail, Lock } from "lucide-react";
+import { LogIn, Phone, Lock } from "lucide-react";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,14 +15,21 @@ export default function LoginPage() {
     setLoading(true);
     setError("");
 
-    const email = e.target.email.value;
+    const nomorHp = e.target.nomorHp.value;
     const password = e.target.password.value;
+
+    const phoneRegex = /^[0-9]+$/;
+    if (!phoneRegex.test(nomorHp)) {
+      setError("Nomor HP hanya boleh berisi angka.");
+      setLoading(false);
+      return;
+    }
 
     try {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ nomorHp, password }),
       });
 
       const data = await res.json();
@@ -62,10 +69,10 @@ export default function LoginPage() {
 
         <form onSubmit={handleSubmit}>
           <div className="input-group">
-            <label className="input-label">Email Address</label>
+            <label className="input-label">Nomor HP (WhatsApp)</label>
             <div style={{ position: "relative" }}>
-              <Mail size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <input type="email" name="email" required className="input-field" placeholder="you@example.com" style={{ paddingLeft: "2.75rem" }} />
+              <Phone size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+              <input type="tel" name="nomorHp" required className="input-field" placeholder="081234567890" style={{ paddingLeft: "2.75rem" }} pattern="[0-9]+" title="Nomor HP hanya boleh berisi angka" />
             </div>
           </div>
 

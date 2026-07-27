@@ -5,6 +5,12 @@ import crypto from "crypto";
 export async function POST(request) {
   try {
     const body = await request.json();
+
+    const phoneRegex = /^[0-9]+$/;
+    if (body.nomorHp && !phoneRegex.test(body.nomorHp)) {
+      return NextResponse.json({ success: false, message: "Nomor HP hanya boleh berisi angka." }, { status: 400 });
+    }
+
     const gasUrl = process.env.GAS_URL;
 
     if (!gasUrl) {
@@ -14,7 +20,7 @@ export async function POST(request) {
     if (body.password) {
       const secret = process.env.JWT_SECRET || "default_secret";
       body.password = crypto.createHash("sha256").update(body.password + secret).digest("hex");
-      console.log("[LOGIN] Email:", body.email, " | Hashed Password:", body.password);
+      console.log("[LOGIN] Nomor HP:", body.nomorHp, " | Hashed Password:", body.password);
     }
 
     const response = await fetch(`${gasUrl}?action=login`, {

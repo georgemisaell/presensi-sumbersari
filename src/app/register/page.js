@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { UserPlus, Mail, Lock, User } from "lucide-react";
+import { UserPlus, Phone, Lock, User, Briefcase } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
@@ -16,7 +16,8 @@ export default function RegisterPage() {
     setError("");
 
     const name = e.target.name.value;
-    const email = e.target.email.value;
+    const nomorHp = e.target.nomorHp.value;
+    const jabatan = e.target.jabatan.value;
     const password = e.target.password.value;
     const confirmPassword = e.target.confirmPassword.value;
 
@@ -26,11 +27,25 @@ export default function RegisterPage() {
       return;
     }
 
+    const nameRegex = /^[a-zA-Z\s.,']+$/;
+    if (!nameRegex.test(name)) {
+      setError("Nama tidak boleh mengandung karakter spesial/angka.");
+      setLoading(false);
+      return;
+    }
+
+    const phoneRegex = /^[0-9]+$/;
+    if (!phoneRegex.test(nomorHp)) {
+      setError("Nomor HP hanya boleh berisi angka.");
+      setLoading(false);
+      return;
+    }
+
     try {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ name, nomorHp, jabatan, password }),
       });
 
       const data = await res.json();
@@ -70,15 +85,34 @@ export default function RegisterPage() {
             <label className="input-label">Full Name</label>
             <div style={{ position: "relative" }}>
               <User size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <input type="text" name="name" required className="input-field" placeholder="John Doe" style={{ paddingLeft: "2.75rem" }} />
+              <input type="text" name="name" required className="input-field" placeholder="John Doe" style={{ paddingLeft: "2.75rem" }} pattern="[a-zA-Z\s.,']+" title="Nama hanya boleh berisi huruf" />
             </div>
           </div>
 
           <div className="input-group">
-            <label className="input-label">Email Address</label>
+            <label className="input-label">Nomor HP (WhatsApp)</label>
             <div style={{ position: "relative" }}>
-              <Mail size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <input type="email" name="email" required className="input-field" placeholder="you@example.com" style={{ paddingLeft: "2.75rem" }} />
+              <Phone size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+              <input type="tel" name="nomorHp" required className="input-field" placeholder="081234567890" style={{ paddingLeft: "2.75rem" }} pattern="[0-9]+" title="Nomor HP hanya boleh berisi angka" />
+            </div>
+          </div>
+
+          <div className="input-group">
+            <label className="input-label">Jabatan</label>
+            <div style={{ position: "relative" }}>
+              <Briefcase size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+              <select name="jabatan" required className="input-field" style={{ paddingLeft: "2.75rem", appearance: "none" }} defaultValue="">
+                <option value="" disabled>Pilih Jabatan</option>
+                <option value="Kepala Desa">Kepala Desa</option>
+                <option value="Sekretaris Desa">Sekretaris Desa</option>
+                <option value="Kaur Keuangan">Kaur Keuangan</option>
+                <option value="Kaur Perencanaan">Kaur Perencanaan</option>
+                <option value="Kaur Umum dan TU">Kaur Umum dan TU</option>
+                <option value="Kasi Pemerintahan">Kasi Pemerintahan</option>
+                <option value="Kasi Pelayanan">Kasi Pelayanan</option>
+                <option value="Kamituwo Dusun Kenep">Kamituwo Dusun Kenep</option>
+                <option value="Karyawan Desa">Karyawan Desa</option>
+              </select>
             </div>
           </div>
 
