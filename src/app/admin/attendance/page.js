@@ -8,7 +8,7 @@ export default function AdminAttendance() {
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  
+
   // Filter state
   const [filterType, setFilterType] = useState("date"); // 'all', 'date', 'month'
   const [filterValue, setFilterValue] = useState(format(new Date(), "yyyy-MM-dd"));
@@ -75,7 +75,7 @@ export default function AdminAttendance() {
 
   async function deleteRecord(id) {
     if (!confirm("Yakin ingin menghapus data presensi ini?")) return;
-    
+
     // Optimistic UI Update
     const originalRecords = [...records];
     setRecords(records.filter(r => r.id !== id));
@@ -107,11 +107,11 @@ export default function AdminAttendance() {
     <div className="animate-fade-in">
       <div className="flex-responsive" style={{ marginBottom: "2rem" }}>
         <h1>Data Presensi</h1>
-        
+
         <div className="glass-card" style={{ padding: "0.5rem 1rem", display: "flex", gap: "1rem", alignItems: "center" }}>
           <Filter size={18} color="var(--text-secondary)" />
-          <select 
-            className="input-field" 
+          <select
+            className="input-field"
             style={{ padding: "0.5rem", minWidth: "150px" }}
             value={filterType}
             onChange={(e) => {
@@ -120,14 +120,14 @@ export default function AdminAttendance() {
             }}
           >
             <option value="all">Semua Data</option>
-            <option value="date">Berdasarkan Tanggal</option>
-            <option value="month">Berdasarkan Bulan</option>
+            <option value="date">Tanggal</option>
+            <option value="month">Bulan</option>
           </select>
 
           {filterType === "date" && (
-            <input 
-              type="date" 
-              className="input-field" 
+            <input
+              type="date"
+              className="input-field"
               style={{ padding: "0.5rem" }}
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
@@ -135,9 +135,9 @@ export default function AdminAttendance() {
           )}
 
           {filterType === "month" && (
-            <input 
-              type="month" 
-              className="input-field" 
+            <input
+              type="month"
+              className="input-field"
               style={{ padding: "0.5rem" }}
               value={filterValue}
               onChange={(e) => setFilterValue(e.target.value)}
@@ -146,8 +146,8 @@ export default function AdminAttendance() {
 
           <div style={{ width: "1px", height: "24px", background: "var(--glass-border)", margin: "0 0.5rem" }}></div>
 
-          <select 
-            className="input-field" 
+          <select
+            className="input-field"
             style={{ padding: "0.5rem", minWidth: "140px" }}
             value={filterAttendanceType}
             onChange={(e) => setFilterAttendanceType(e.target.value)}
@@ -183,9 +183,9 @@ export default function AdminAttendance() {
                   <div className="flex-center"><div className="spinner"></div></div>
                 </td>
               </tr>
-            ) : records.length === 0 ? (
+            ) : filteredRecords.length === 0 ? (
               <tr>
-                <td colSpan="9" style={{ textAlign: "center", padding: "2rem" }}>Belum ada data presensi</td>
+                <td colSpan="9" style={{ textAlign: "center", padding: "2rem" }}>Belum ada data presensi pada filter yang dipilih</td>
               </tr>
             ) : (
               filteredRecords.map((rec, idx) => (

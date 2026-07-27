@@ -14,10 +14,6 @@ export default function AdminSettings() {
     checkOutLimit: "17:00",
   });
 
-  useEffect(() => {
-    fetchSettings();
-  }, []);
-
   async function fetchSettings() {
     try {
       const res = await fetch("/api/settings");
@@ -36,6 +32,10 @@ export default function AdminSettings() {
       setLoading(false);
     }
   }
+
+  useEffect(() => {
+    fetchSettings();
+  }, []);
 
   async function handleSave(e) {
     e.preventDefault();

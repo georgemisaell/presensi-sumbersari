@@ -22,9 +22,24 @@ export default function Home() {
   const canvasRef = useRef(null);
   const [streamActive, setStreamActive] = useState(false);
 
-  useEffect(() => {
-    checkSession();
-  }, []);
+  async function fetchTodayStatus() {
+    try {
+      const res = await fetch("/api/attendance/today");
+      const data = await res.json();
+      if (data.success) {
+        if (data.hasCheckedOut) setTodayStatus('checked-out');
+        else if (data.hasCheckedIn) setTodayStatus('checked-in');
+        else setTodayStatus('none');
+      } else {
+        setTodayStatus('none');
+      }
+    } catch (e) {
+      console.error(e);
+      setTodayStatus('none');
+    } finally {
+      setFetchingStatus(false);
+    }
+  }
 
   async function checkSession() {
     try {
@@ -47,23 +62,9 @@ export default function Home() {
     }
   }
 
-  async function fetchTodayStatus() {
-    try {
-      const res = await fetch("/api/attendance/today");
-      const data = await res.json();
-      if (data.success) {
-        if (data.hasCheckedOut) setTodayStatus('checked-out');
-        else if (data.hasCheckedIn) setTodayStatus('checked-in');
-        else setTodayStatus('none');
-      } else {
-        setTodayStatus('none');
-      }
-    } catch (e) {
-      setTodayStatus('none');
-    } finally {
-      setFetchingStatus(false);
-    }
-  }
+  useEffect(() => {
+    checkSession();
+  }, []);
 
   async function handleLogout() {
     await fetch("/api/auth/logout", { method: "POST" });

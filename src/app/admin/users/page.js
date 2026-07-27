@@ -14,10 +14,34 @@ export default function AdminUsers() {
   const [editingUser, setEditingUser] = useState(null);
   const [editFormData, setEditFormData] = useState({ name: "", jabatan: "", role: "", status: "" });
 
+  async function fetchUsers() {
+    try {
+      const [res, meRes] = await Promise.all([
+        fetch("/api/admin/users"),
+        fetch("/api/auth/me")
+      ]);
+      
+      if (meRes.ok) {
+        const meResult = await meRes.json();
+        setCurrentUser(meResult.user);
+      }
+      
+      const result = await res.json();
+      if (result.success) {
+        setUsers(result.data);
+      } else {
+        setError(result.message || "Failed to load users");
+      }
+    } catch (e) {
+      setError("An error occurred.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
   useEffect(() => {
     fetchUsers();
   }, []);
-
   async function handleUpdateStatus(userId, status) {
     if (!confirm(`Are you sure you want to ${status} this user?`)) return;
 
@@ -105,33 +129,6 @@ export default function AdminUsers() {
     }
   }
 
-  async function fetchUsers() {
-    try {
-      const [res, meRes] = await Promise.all([
-        fetch("/api/admin/users"),
-        fetch("/api/auth/me")
-      ]);
-      
-      if (meRes.ok) {
-        const meResult = await meRes.json();
-        setCurrentUser(meResult.user);
-      }
-      
-      const result = await res.json();
-      if (result.success) {
-        setUsers(result.data);
-      } else {
-        setError(result.message || "Failed to load users");
-      }
-    } catch (e) {
-      setError("An error occurred.");
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  if (loading) return <div className="flex-center" style={{ minHeight: "60vh" }}><div className="spinner"></div></div>;
-  if (error) return <div style={{ color: "var(--danger)" }}>Error: {error}</div>;
 
   return (
     <div className="animate-fade-in">
@@ -139,6 +136,8 @@ export default function AdminUsers() {
         <h1>Data Users</h1>
         <div className="badge badge-success">Total: {users.filter(u => u.status !== 'deleted').length} Active Users</div>
       </div>
+
+      {error && <div style={{ color: "var(--danger)", marginBottom: "1rem" }}>Error: {error}</div>}
 
       <div className="table-container">
         <table>
@@ -155,9 +154,15 @@ export default function AdminUsers() {
             </tr>
           </thead>
           <tbody>
-            {users.length === 0 ? (
+            {loading ? (
               <tr>
-                <td colSpan="7" style={{ textAlign: "center", padding: "2rem" }}>No users found</td>
+                <td colSpan="8" style={{ textAlign: "center", padding: "2rem" }}>
+                  <div className="flex-center"><div className="spinner"></div></div>
+                </td>
+              </tr>
+            ) : users.filter(u => u.status !== 'deleted').length === 0 ? (
+              <tr>
+                <td colSpan="8" style={{ textAlign: "center", padding: "2rem" }}>Data kosong sesuai dengan filter yang dipilih</td>
               </tr>
             ) : (
               users.map((user, idx) => {
