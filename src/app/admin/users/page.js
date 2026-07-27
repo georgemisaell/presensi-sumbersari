@@ -157,7 +157,7 @@ export default function AdminUsers() {
             {loading ? (
               <tr>
                 <td colSpan="8" style={{ textAlign: "center", padding: "2rem" }}>
-                  <div className="flex-center"><div className="spinner"></div></div>
+                  <div className="flex-center"><div className="spinner" style={{ borderColor: "rgba(15, 23, 42, 0.2)", borderTopColor: "#0f172a" }}></div></div>
                 </td>
               </tr>
             ) : users.filter(u => u.status !== 'deleted').length === 0 ? (
@@ -234,11 +234,17 @@ export default function AdminUsers() {
       </div>
 
       {editingUser && (
-        <div style={{ position: "fixed", top: 0, left: 0, width: "100vw", height: "100vh", background: "rgba(15, 23, 42, 0.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999 }}>
-          <div className="glass-card animate-fade-in" style={{ width: "400px", maxWidth: "90%", padding: "2rem", background: "var(--bg-secondary)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)" }}>
-            <h3 style={{ marginBottom: "1.5rem", color: "var(--text-primary)" }}>Edit User</h3>
-            <form onSubmit={submitEdit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-              <div className="input-group">
+        <div style={{ position: "fixed", top: 0, left: 0, width: "100%", height: "100%", background: "rgba(15, 23, 42, 0.8)", backdropFilter: "blur(4px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 9999 }}>
+          <div className="glass-card animate-fade-in" style={{ width: "400px", maxWidth: "90%", padding: "0", background: "var(--bg-secondary)", border: "1px solid var(--glass-border)", borderRadius: "var(--radius-lg)", boxShadow: "var(--shadow-lg)", overflow: "hidden" }}>
+            <div style={{ padding: "1.5rem", borderBottom: "1px solid var(--glass-border)", display: "flex", justifyContent: "space-between", alignItems: "center", background: "rgba(241, 245, 249, 0.5)" }}>
+              <h3 style={{ margin: 0, color: "var(--text-primary)", fontSize: "1.25rem" }}>Edit User</h3>
+              <button onClick={() => setEditingUser(null)} style={{ background: "none", border: "none", cursor: "pointer", color: "var(--text-secondary)" }}>
+                <X size={20} />
+              </button>
+            </div>
+            <div style={{ padding: "1.5rem" }}>
+              <form onSubmit={submitEdit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
+                <div className="input-group">
                 <label className="input-label">Name</label>
                 <input
                   type="text"
@@ -281,24 +287,25 @@ export default function AdminUsers() {
                 </select>
               </div>
 
-              <div className="input-group">
-                <label className="input-label">Status</label>
-                <select
-                  className="input-field"
-                  value={editFormData.status}
-                  onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
-                >
-                  <option value="approved" style={{ background: "var(--bg-secondary)" }}>Approved</option>
-                  <option value="pending" style={{ background: "var(--bg-secondary)" }}>Pending</option>
-                  <option value="rejected" style={{ background: "var(--bg-secondary)" }}>Rejected</option>
-                </select>
-              </div>
+                <div className="input-group" style={{ marginBottom: "2rem" }}>
+                  <label className="input-label">Status</label>
+                  <select
+                    className="input-field"
+                    value={editFormData.status}
+                    onChange={(e) => setEditFormData({ ...editFormData, status: e.target.value })}
+                  >
+                    <option value="approved">Approved</option>
+                    <option value="pending">Pending</option>
+                    <option value="rejected">Rejected</option>
+                  </select>
+                </div>
 
-              <div style={{ display: "flex", gap: "1rem", marginTop: "1rem" }}>
-                <button type="button" onClick={() => setEditingUser(null)} className="btn btn-secondary" style={{ flex: 1 }}>Cancel</button>
-                <button type="submit" className="btn btn-primary" style={{ flex: 1 }}>Save</button>
-              </div>
-            </form>
+                <div style={{ display: "flex", gap: "1rem" }}>
+                  <button type="button" onClick={() => setEditingUser(null)} className="btn btn-secondary" style={{ flex: 1, padding: "0.75rem" }}>Batal</button>
+                  <button type="submit" className="btn btn-primary" style={{ flex: 1, padding: "0.75rem" }}>Simpan</button>
+                </div>
+              </form>
+            </div>
           </div>
         </div>
       )}

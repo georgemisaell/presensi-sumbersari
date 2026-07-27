@@ -77,85 +77,87 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="flex-center min-h-screen">
-      <div className="glass-card animate-fade-in" style={{ width: "100%", maxWidth: "450px" }}>
-        <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-          <div className="flex-center" style={{ width: "64px", height: "64px", borderRadius: "50%", background: "var(--accent-gradient)", margin: "0 auto 1rem" }}>
-            <UserPlus size={32} color="white" />
-          </div>
-          <h2>Create Account</h2>
-          <p style={{ color: "var(--text-secondary)", marginTop: "0.5rem" }}>Join Presensi Sumbersari today</p>
-        </div>
-
-        {error && (
-          <div style={{ background: "rgba(239, 68, 68, 0.1)", color: "var(--danger)", padding: "0.75rem", borderRadius: "var(--radius-md)", marginBottom: "1.5rem", fontSize: "0.875rem", textAlign: "center", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
-            {error}
-          </div>
-        )}
-
-        <form onSubmit={handleSubmit}>
-          <div className="input-group">
-            <label className="input-label">Full Name</label>
-            <div style={{ position: "relative" }}>
-              <User size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <input type="text" name="name" required className="input-field" placeholder="John Doe" style={{ paddingLeft: "2.75rem" }} pattern="[a-zA-Z\s.,']+" title="Nama hanya boleh berisi huruf" />
+    <div className="theme-light" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <div className="flex-center" style={{ flex: 1, padding: "2rem" }}>
+        <div className="glass-card animate-fade-in" style={{ width: "100%", maxWidth: "450px" }}>
+          <div style={{ textAlign: "center", marginBottom: "2rem" }}>
+            <div className="flex-center" style={{ marginBottom: "1.5rem" }}>
+              <img src="/logo-kabupaten-madiun.webp" alt="Logo Kabupaten Madiun" style={{ width: "250px", height: "auto" }} />
             </div>
+            <h2>Pendaftaran Akun</h2>
+            <p style={{ color: "var(--text-secondary)", marginTop: "0.5rem" }}>Bergabung dengan Presensi Sumbersari</p>
           </div>
 
-          <div className="input-group">
-            <label className="input-label">Nomor HP (WhatsApp)</label>
-            <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
-              <div style={{ position: "absolute", left: "1rem", color: "var(--text-secondary)", fontWeight: "500", display: "flex", alignItems: "center", gap: "0.25rem" }}>
-                <Phone size={18} />
-                <span>+62</span>
+          {error && (
+            <div style={{ background: "rgba(239, 68, 68, 0.1)", color: "var(--danger)", padding: "0.75rem", borderRadius: "var(--radius-md)", marginBottom: "1.5rem", fontSize: "0.875rem", textAlign: "center", border: "1px solid rgba(239, 68, 68, 0.2)" }}>
+              {error}
+            </div>
+          )}
+
+          <form onSubmit={handleSubmit}>
+            <div className="input-group">
+              <label className="input-label">Nama Lengkap</label>
+              <div style={{ position: "relative" }}>
+                <User size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+                <input type="text" name="name" required className="input-field" placeholder="John Doe" style={{ paddingLeft: "2.75rem" }} pattern="[a-zA-Z\s.,']+" title="Nama hanya boleh berisi huruf" />
               </div>
-              <input type="tel" name="nomorHp" required className="input-field" placeholder="81234567890" style={{ paddingLeft: "4.5rem" }} pattern="[0-9]+" title="Nomor HP hanya boleh berisi angka" />
             </div>
-          </div>
 
-          <div className="input-group">
-            <label className="input-label">Jabatan</label>
-            <div style={{ position: "relative" }}>
-              <Briefcase size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <select name="jabatan" required className="input-field" style={{ paddingLeft: "2.75rem", appearance: "none" }} defaultValue="">
-                <option value="" disabled>Pilih Jabatan</option>
-                <option value="Kepala Desa">Kepala Desa</option>
-                <option value="Sekretaris Desa">Sekretaris Desa</option>
-                <option value="Kaur Keuangan">Kaur Keuangan</option>
-                <option value="Kaur Perencanaan">Kaur Perencanaan</option>
-                <option value="Kaur Umum dan TU">Kaur Umum dan TU</option>
-                <option value="Kasi Pemerintahan">Kasi Pemerintahan</option>
-                <option value="Kasi Pelayanan">Kasi Pelayanan</option>
-                <option value="Kamituwo Dusun Kenep">Kamituwo Dusun Kenep</option>
-                <option value="Karyawan Desa">Karyawan Desa</option>
-              </select>
+            <div className="input-group">
+              <label className="input-label">Nomor HP (WhatsApp)</label>
+              <div style={{ position: "relative", display: "flex", alignItems: "center" }}>
+                <div style={{ position: "absolute", left: "1rem", color: "var(--text-secondary)", fontWeight: "500", display: "flex", alignItems: "center", gap: "0.25rem" }}>
+                  <Phone size={18} />
+                  <span>+62</span>
+                </div>
+                <input type="tel" name="nomorHp" required className="input-field" placeholder="81234567890" style={{ paddingLeft: "4.5rem" }} pattern="[0-9]+" title="Nomor HP hanya boleh berisi angka" />
+              </div>
             </div>
-          </div>
 
-          <div className="input-group">
-            <label className="input-label">Password</label>
-            <div style={{ position: "relative" }}>
-              <Lock size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <input type="password" name="password" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem" }} minLength={6} />
+            <div className="input-group">
+              <label className="input-label">Jabatan</label>
+              <div style={{ position: "relative" }}>
+                <Briefcase size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+                <select name="jabatan" required className="input-field" style={{ paddingLeft: "2.75rem", appearance: "none" }} defaultValue="">
+                  <option value="" disabled>Pilih Jabatan</option>
+                  <option value="Kepala Desa">Kepala Desa</option>
+                  <option value="Sekretaris Desa">Sekretaris Desa</option>
+                  <option value="Kaur Keuangan">Kaur Keuangan</option>
+                  <option value="Kaur Perencanaan">Kaur Perencanaan</option>
+                  <option value="Kaur Umum dan TU">Kaur Umum dan TU</option>
+                  <option value="Kasi Pemerintahan">Kasi Pemerintahan</option>
+                  <option value="Kasi Pelayanan">Kasi Pelayanan</option>
+                  <option value="Kamituwo Dusun Kenep">Kamituwo Dusun Kenep</option>
+                  <option value="Karyawan Desa">Karyawan Desa</option>
+                </select>
+              </div>
             </div>
-          </div>
 
-          <div className="input-group">
-            <label className="input-label">Confirm Password</label>
-            <div style={{ position: "relative" }}>
-              <Lock size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-              <input type="password" name="confirmPassword" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem" }} minLength={6} />
+            <div className="input-group">
+              <label className="input-label">Password</label>
+              <div style={{ position: "relative" }}>
+                <Lock size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+                <input type="password" name="password" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem" }} minLength={6} />
+              </div>
             </div>
-          </div>
 
-          <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
-            {loading ? <div className="spinner"></div> : "Register Account"}
-          </button>
-        </form>
+            <div className="input-group">
+              <label className="input-label">Konfirmasi Password</label>
+              <div style={{ position: "relative" }}>
+                <Lock size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
+                <input type="password" name="confirmPassword" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem" }} minLength={6} />
+              </div>
+            </div>
 
-        <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)", fontSize: "0.875rem" }}>
-          Already have an account? <Link href="/login" style={{ fontWeight: 600 }}>Login here</Link>
-        </p>
+            <button type="submit" className="btn btn-primary" style={{ width: "100%", marginTop: "1rem" }} disabled={loading}>
+              {loading ? <div className="spinner"></div> : "Daftar Akun"}
+            </button>
+          </form>
+
+          <p style={{ textAlign: "center", marginTop: "2rem", color: "var(--text-secondary)", fontSize: "0.875rem" }}>
+            Sudah punya akun? <Link href="/login" style={{ fontWeight: 600, color: "var(--primary)" }}>Login di sini</Link>
+          </p>
+        </div>
       </div>
     </div>
   );

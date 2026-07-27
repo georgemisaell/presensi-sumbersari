@@ -197,123 +197,127 @@ export default function Home() {
   if (!user) return null;
 
   return (
-    <div className="theme-light">
-      <div className="container" style={{ padding: "2rem 1.5rem" }}>
-      <header className="flex-responsive" style={{ marginBottom: "2rem" }}>
-        <div>
-          <h2>Halo, {user.name}!</h2>
-          <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
-            <span style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>Status Hari Ini:</span>
-            {todayStatus === 'checked-out' && <span className="badge badge-success">Selesai (Sudah Check Out)</span>}
-            {todayStatus === 'checked-in' && <span className="badge badge-warning">Sedang Bekerja (Sudah Check In)</span>}
-            {todayStatus === 'none' && <span className="badge badge-danger">Belum Absen Masuk</span>}
-          </div>
-        </div>
-        <button onClick={handleLogout} className="btn btn-secondary" style={{ padding: "0.5rem 1rem" }}>
-          <LogOut size={16} /> Logout
-        </button>
-      </header>
-
-      <main className="glass-card animate-fade-in" style={{ maxWidth: "600px", margin: "0 auto" }}>
-
-        {todayStatus === 'checked-out' ? (
-          <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
-            <div className="flex-center" style={{ width: "80px", height: "80px", borderRadius: "50%", background: "rgba(16, 185, 129, 0.1)", margin: "0 auto 1.5rem" }}>
-              <CheckCircle2 size={40} color="var(--success)" />
+    <div className="theme-light" style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+      <div className="container" style={{ padding: "2rem 1.5rem", flex: 1, display: "flex", flexDirection: "column" }}>
+        <header className="flex-responsive" style={{ marginBottom: "2rem" }}>
+          <div>
+            <h2>Halo, {user.name}!</h2>
+            <div style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginTop: "0.5rem" }}>
+              <span style={{ color: "var(--text-secondary)", fontSize: "0.875rem" }}>Status Hari Ini:</span>
+              {todayStatus === 'checked-out' && <span className="badge badge-success">Selesai (Sudah Check Out)</span>}
+              {todayStatus === 'checked-in' && <span className="badge badge-warning">Sedang Bekerja (Sudah Check In)</span>}
+              {todayStatus === 'none' && <span className="badge badge-danger">Belum Absen Masuk</span>}
             </div>
-            <h3>Absensi Selesai</h3>
-            <p style={{ color: "var(--text-secondary)", marginTop: "0.5rem" }}>Anda sudah melakukan Check In dan Check Out hari ini. Terima kasih!</p>
           </div>
-        ) : (
-          <>
-            {/* Step 1: Location */}
-            <div style={{ marginBottom: "2rem" }}>
-              <h3 style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-                <MapPin size={20} color="var(--accent-color)" /> Lokasi Saat Ini
-              </h3>
+          <button onClick={handleLogout} className="btn btn-secondary" style={{ padding: "0.5rem 1rem" }}>
+            <LogOut size={16} /> Logout
+          </button>
+        </header>
 
-              {location ? (
-                <div style={{ background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.2)", padding: "1rem", borderRadius: "var(--radius-md)", color: "var(--success)" }}>
-                  Lokasi berhasil didapatkan: {location.lat.toFixed(5)}, {location.lng.toFixed(5)}
-                </div>
-              ) : (
-                <div>
-                  <p style={{ color: "var(--text-secondary)", marginBottom: "1rem" }}>Kami perlu mendeteksi lokasi Anda untuk presensi {todayStatus === 'checked-in' ? 'pulang (Check Out)' : 'masuk (Check In)'}.</p>
-                  <button onClick={getLocation} className="btn btn-primary" style={{ width: "100%" }} disabled={locLoading}>
-                    {locLoading ? <div className="spinner"></div> : <><MapPin size={18} /> Dapatkan Lokasi</>}
-                  </button>
-                  {locError && <p style={{ color: "var(--danger)", marginTop: "0.5rem", fontSize: "0.875rem" }}>{locError}</p>}
-                </div>
-              )}
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", justifyContent: "center", paddingBottom: "4rem" }}>
+          <main className="glass-card animate-fade-in" style={{ maxWidth: "600px", margin: "0 auto", width: "100%" }}>
+
+          {todayStatus === 'checked-out' ? (
+            <div style={{ textAlign: "center", padding: "3rem 1rem" }}>
+              <div className="flex-center" style={{ width: "80px", height: "80px", borderRadius: "50%", background: "rgba(16, 185, 129, 0.1)", margin: "0 auto 1.5rem" }}>
+                <CheckCircle2 size={40} color="var(--success)" />
+              </div>
+              <h3>Absensi Selesai</h3>
+              <p style={{ color: "var(--text-secondary)", marginTop: "0.5rem" }}>Anda sudah melakukan Check In dan Check Out hari ini. Terima kasih!</p>
             </div>
-
-            {/* Step 2: Camera */}
-            {location && (
+          ) : (
+            <>
+              {/* Step 1: Location */}
               <div style={{ marginBottom: "2rem" }}>
                 <h3 style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
-                  <Camera size={20} color="var(--accent-color)" /> Ambil Foto Selfie
+                  <MapPin size={20} color="var(--accent-color)" /> Lokasi Saat Ini
                 </h3>
 
-                {!photoBase64 ? (
-                  <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: "var(--radius-md)", overflow: "hidden", position: "relative" }}>
-                    {!streamActive && (
-                      <div className="flex-center" style={{ height: "250px" }}>
-                        <button onClick={startCamera} className="btn btn-secondary">
-                          <Camera size={18} /> Buka Kamera
-                        </button>
-                      </div>
-                    )}
-                    <video
-                      ref={videoRef}
-                      autoPlay
-                      playsInline
-                      style={{ width: "100%", display: streamActive ? "block" : "none" }}
-                    ></video>
-                    {streamActive && (
-                      <div style={{ position: "absolute", bottom: "1rem", left: "0", right: "0", display: "flex", justifyContent: "center" }}>
-                        <button onClick={takePhoto} className="btn btn-primary" style={{ borderRadius: "50%", width: "60px", height: "60px", padding: 0 }}>
-                          <Camera size={24} />
-                        </button>
-                      </div>
-                    )}
+                {location ? (
+                  <div style={{ background: "rgba(16, 185, 129, 0.1)", border: "1px solid rgba(16, 185, 129, 0.2)", padding: "1rem", borderRadius: "var(--radius-md)", color: "var(--success)" }}>
+                    Lokasi berhasil didapatkan: {location.lat.toFixed(5)}, {location.lng.toFixed(5)}
                   </div>
                 ) : (
-                  <div style={{ position: "relative" }}>
-                    <img src={photoBase64} alt="Selfie" style={{ width: "100%", borderRadius: "var(--radius-md)", border: "1px solid var(--glass-border)" }} />
-                    <button onClick={retakePhoto} className="btn btn-secondary" style={{ position: "absolute", bottom: "1rem", left: "50%", transform: "translateX(-50%)" }}>
-                      Ulangi Foto
+                  <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "1rem 0" }}>
+                    <p style={{ color: "var(--text-secondary)", marginBottom: "1.5rem", textAlign: "center" }}>Kami perlu mendeteksi lokasi Anda untuk presensi {todayStatus === 'checked-in' ? 'pulang (Check Out)' : 'masuk (Check In)'}.</p>
+                    
+                    <button onClick={getLocation} className="btn btn-primary" style={{ width: "100%", maxWidth: "300px", padding: "0.75rem 1rem" }} disabled={locLoading}>
+                      {locLoading ? <div className="spinner"></div> : <><MapPin size={18} /> Dapatkan Lokasi</>}
                     </button>
+                    
+                    {locError && <p style={{ color: "var(--danger)", marginTop: "1rem", fontSize: "0.875rem", textAlign: "center" }}>{locError}</p>}
                   </div>
                 )}
-
-                {/* Hidden canvas for capturing the frame */}
-                <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
               </div>
-            )}
 
-            {/* Submit Action */}
-            {location && photoBase64 && (
-              <div style={{ borderTop: "1px solid var(--glass-border)", paddingTop: "1.5rem", marginTop: "1rem" }}>
-                {message && (
-                  <div style={{ padding: "1rem", borderRadius: "var(--radius-md)", marginBottom: "1rem", textAlign: "center", background: message.includes("berhasil") ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)", color: message.includes("berhasil") ? "var(--success)" : "var(--danger)" }}>
-                    {message}
-                  </div>
-                )}
+              {/* Step 2: Camera */}
+              {location && (
+                <div style={{ marginBottom: "2rem" }}>
+                  <h3 style={{ display: "flex", alignItems: "center", gap: "0.5rem", marginBottom: "1rem" }}>
+                    <Camera size={20} color="var(--accent-color)" /> Ambil Foto Selfie
+                  </h3>
 
-                <button
-                  onClick={() => submitAttendance(todayStatus === 'checked-in' ? 'Check Out' : 'Check In')}
-                  className={`btn ${todayStatus === 'checked-in' ? 'btn-warning' : 'btn-primary'}`}
-                  style={{ width: "100%", padding: "1rem", fontSize: "1.125rem" }}
-                  disabled={submitting}
-                >
-                  {submitting ? <div className="spinner"></div> : <><Send size={20} /> {todayStatus === 'checked-in' ? 'Kirim Check Out' : 'Kirim Check In'}</>}
-                </button>
-              </div>
-            )}
-          </>
-        )}
+                  {!photoBase64 ? (
+                    <div style={{ background: "rgba(0,0,0,0.3)", borderRadius: "var(--radius-md)", overflow: "hidden", position: "relative" }}>
+                      {!streamActive && (
+                        <div className="flex-center" style={{ height: "250px" }}>
+                          <button onClick={startCamera} className="btn btn-secondary">
+                            <Camera size={18} /> Buka Kamera
+                          </button>
+                        </div>
+                      )}
+                      <video
+                        ref={videoRef}
+                        autoPlay
+                        playsInline
+                        style={{ width: "100%", display: streamActive ? "block" : "none" }}
+                      ></video>
+                      {streamActive && (
+                        <div style={{ position: "absolute", bottom: "1rem", left: "0", right: "0", display: "flex", justifyContent: "center" }}>
+                          <button onClick={takePhoto} className="btn btn-primary" style={{ borderRadius: "50%", width: "60px", height: "60px", padding: 0 }}>
+                            <Camera size={24} />
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  ) : (
+                    <div style={{ position: "relative" }}>
+                      <img src={photoBase64} alt="Selfie" style={{ width: "100%", borderRadius: "var(--radius-md)", border: "1px solid var(--glass-border)" }} />
+                      <button onClick={retakePhoto} className="btn btn-secondary" style={{ position: "absolute", bottom: "1rem", left: "50%", transform: "translateX(-50%)" }}>
+                        Ulangi Foto
+                      </button>
+                    </div>
+                  )}
 
-      </main>
+                  {/* Hidden canvas for capturing the frame */}
+                  <canvas ref={canvasRef} style={{ display: "none" }}></canvas>
+                </div>
+              )}
+
+              {/* Submit Action */}
+              {location && photoBase64 && (
+                <div style={{ borderTop: "1px solid var(--glass-border)", paddingTop: "1.5rem", marginTop: "1rem" }}>
+                  {message && (
+                    <div style={{ padding: "1rem", borderRadius: "var(--radius-md)", marginBottom: "1rem", textAlign: "center", background: message.includes("berhasil") ? "rgba(16, 185, 129, 0.1)" : "rgba(239, 68, 68, 0.1)", color: message.includes("berhasil") ? "var(--success)" : "var(--danger)" }}>
+                      {message}
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => submitAttendance(todayStatus === 'checked-in' ? 'Check Out' : 'Check In')}
+                    className={`btn ${todayStatus === 'checked-in' ? 'btn-warning' : 'btn-primary'}`}
+                    style={{ width: "100%", padding: "1rem", fontSize: "1.125rem" }}
+                    disabled={submitting}
+                  >
+                    {submitting ? <div className="spinner"></div> : <><Send size={20} /> {todayStatus === 'checked-in' ? 'Kirim Check Out' : 'Kirim Check In'}</>}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+
+        </main>
+        </div>
       </div>
     </div>
   );
