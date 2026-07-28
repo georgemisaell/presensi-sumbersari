@@ -3,12 +3,14 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
-import { UserPlus, Phone, Lock, User, Briefcase } from "lucide-react";
+import { UserPlus, Phone, Lock, User, Briefcase, Eye, EyeOff } from "lucide-react";
 
 export default function RegisterPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -137,7 +139,10 @@ export default function RegisterPage() {
               <label className="input-label">Password</label>
               <div style={{ position: "relative" }}>
                 <Lock size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-                <input type="password" name="password" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem" }} minLength={6} />
+                <input type={showPassword ? "text" : "password"} name="password" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem", paddingRight: "2.75rem" }} minLength={6} />
+                <button type="button" onClick={() => setShowPassword(!showPassword)} style={{ position: "absolute", right: "0.5rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--text-secondary)", cursor: "pointer", padding: "0.5rem" }}>
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
@@ -145,7 +150,10 @@ export default function RegisterPage() {
               <label className="input-label">Konfirmasi Password</label>
               <div style={{ position: "relative" }}>
                 <Lock size={18} style={{ position: "absolute", left: "1rem", top: "50%", transform: "translateY(-50%)", color: "var(--text-secondary)" }} />
-                <input type="password" name="confirmPassword" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem" }} minLength={6} />
+                <input type={showConfirmPassword ? "text" : "password"} name="confirmPassword" required className="input-field" placeholder="••••••••" style={{ paddingLeft: "2.75rem", paddingRight: "2.75rem" }} minLength={6} />
+                <button type="button" onClick={() => setShowConfirmPassword(!showConfirmPassword)} style={{ position: "absolute", right: "0.5rem", top: "50%", transform: "translateY(-50%)", background: "none", border: "none", color: "var(--text-secondary)", cursor: "pointer", padding: "0.5rem" }}>
+                  {showConfirmPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
               </div>
             </div>
 
